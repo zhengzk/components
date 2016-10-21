@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test-pay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="http://static.daojia.com/assets/lib/velvet/styles/velvet.css">
+    <style>
+        html{
+            font-size: 32px;
+            text-align: center;
+        }
+        body{
+            margin-top: 50px;
+        }
+        .prompt-box {
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,.5);
+            z-index: 10;
+            font-family: \\5FAE\8F6F\96C5\9ED1
+        }
+
+        .prompt-box .box {
+            width: 85%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 20;
+            background: #fff;
+            border-radius: 5px;
+            -webkit-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
+            text-align: center
+        }
+
+        .prompt-box .box h3 {
+            margin: 20px 0 10px;
+            font-size: 18px
+        }
+
+        .prompt-box .text {
+            color: #666;
+            font-size: 16px;
+            margin: 0 20px 15px 25px;
+            text-align: left;
+            position: relative
+        }
+
+        .prompt-box .btn-box {
+            height: 44px;
+            line-height: 44px;
+            margin: 0 auto;
+            font-size: 16px;
+            border-top: 1px solid #e0e0e0;
+            color: #e6454a;
+            display: flex;
+            display: -webkit-flex
+        }
+
+        .prompt-box .btn-box .cancel,.prompt-box .btn-box .confirm {
+            -webkit-flex: 1;
+            flex: 1
+        }
+        .prompt-box .btn-box .cancel{
+            border-right: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        通用收银台页面内容
+    </div>
+    <div><a href="finish.html">支付完成</a></div>
+    <div class="prompt-box" style="display: none;">
+        <div class="box"><h3>温馨提示</h3>
+            <p class="text">确认离开么?</p>
+            <div class="btn-box">
+                <div class="cancel">取消</div>
+                <div class="confirm">确定</div>
+            </div>
+        </div>
+    </div>
+
+    <div></div>
+    <script src="http://dj.58cdn.com.cn/fe/cdn/lib_zt_fc.js" type="text/javascript"></script>
+    <script>
+        var $prompt = $('.prompt-box');
+        //确认
+        $('.btn-box .confirm').click(function(){
+            console.log('确认')
+            $prompt.hide();
+//            window.close();
+            //history.go(-1);
+            history.back();
+        });
+        //取消
+        $('.btn-box .cancel').click(function(){
+            console.log('取消')
+            history.go(1);
+        });
+
+        var prompt = true;
+
+        function initRouter(state) {
+            console.log(state, location.hash);
+            switch (location.hash) {
+                case "#toPay":
+                    $prompt.hide();
+                    break;
+                default:
+                    $prompt.show();
+                    break
+            }
+        }
+
+        window.addEventListener('popstate', function (evt) {
+            initRouter(evt.state);
+        }, false);
+
+        if (history.state) {
+            initRouter(history.state);
+        }
+
+        if(prompt){
+            //存储当前prompt标记
+//            history.replaceState({}, null, location.href.split("#")[0]);
+            //增加浏览器访问记录
+            history.pushState({}, null, location.href.split("#")[0] + '#toPay');
+        }
+
+    </script>
+</body>
+</html>
